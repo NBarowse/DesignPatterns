@@ -114,7 +114,6 @@
         public int GetNumberOfMailsDisplayed()
         {
             return Browser.GetDriver().FindElements(mailsDisplayed).Count;
-
         }
 
         /// <summary>

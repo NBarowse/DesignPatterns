@@ -13,6 +13,14 @@
         protected By Locator;
         protected IWebElement Element;
 
+        public string TagName { get; }
+        public string Text { get; }
+        public bool Enabled { get; }
+        public bool Selected { get; }
+        public Point Location { get; }
+        public Size Size { get; }
+        public bool Displayed { get; }
+
         public BaseElement(By locator, string name)
         {
             this.Locator = locator;
@@ -159,13 +167,5 @@
             this.WaitForIsVisible();
             Browser.GetDriver().FindElement(this.Locator).Submit();
         }
-
-        public string TagName { get; }
-        public string Text { get; }
-        public bool Enabled { get; }
-        public bool Selected { get; }
-        public Point Location { get; }
-        public Size Size { get; }
-        public bool Displayed { get; }
     }
 }

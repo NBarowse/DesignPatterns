@@ -160,8 +160,8 @@
             // Perform search in drafts.
             DraftsPage draftsPage = homePage.OpenDrafts();
             draftsPage.SearchMailBySubject(this.subject);
-            int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
             string subjectOfFoundMail = draftsPage.GetMailSubjectText(this.subject);
+            int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
 
             // Verify, that found draft matches searched term 
             Assert.AreEqual(numberOfFoundMails, 1, "The wrong number of mails was found");
