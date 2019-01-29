@@ -160,15 +160,15 @@
             // Perform search in drafts.
             DraftsPage draftsPage = homePage.OpenDrafts();
             draftsPage.SearchMailBySubject(this.subject);
-            int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
             string subjectOfFoundMail = draftsPage.GetMailSubjectText(this.subject);
+            int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
 
             // Verify, that found draft matches searched term 
             Assert.AreEqual(numberOfFoundMails, 1, "The wrong number of mails was found");
             Assert.AreEqual(subjectOfFoundMail, this.subject, "The wrong mail was found");
 
             // Delete searched draft.
-            draftsPage.DeleteMailBySubjectAfterSearch(this.subject);
+            homePage.DeleteMailBySubject(this.subject);
 
             // Verify, that the mail disappeared from ‘Drafts’ folder.
             draftsPage.RefreshPage();
