@@ -226,10 +226,10 @@
 
 
             // Perform search in drafts by clicking Enter key.
-            DraftsPage draftsPage = homePage.OpenDrafts();
+            DraftsPage draftsPage = homePage.JsOpenDrafts(); // JsExecutor
             draftsPage.TypeInSearchBox(this.subject);
-            draftsPage.ClickEnterKey();
-            draftsPage.HighlightMailBySubject(this.subject);
+            draftsPage.ClickEnterKey(); // Action
+            draftsPage.HighlightMailBySubject(this.subject); // JsExecutor
             string subjectOfFoundMail = draftsPage.GetMailSubjectText(this.subject);
             int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
 
@@ -238,7 +238,7 @@
             Assert.AreEqual(this.subject, subjectOfFoundMail, "The wrong mail was found");
 
             // Delete searched draft.
-            homePage.DeleteMailWithContextMenu(this.subject);
+            homePage.DeleteMailWithContextMenu(this.subject); // Action
 
             // Verify, that the mail disappeared from ‘Drafts’ folder.
             draftsPage.RefreshPage();

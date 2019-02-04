@@ -111,6 +111,7 @@
         /// </summary>
         public void JsHighlight()
         {
+            this.WaitForIsVisible();
             IJavaScriptExecutor executor = (IJavaScriptExecutor)Browser.GetDriver();
             executor.ExecuteScript("arguments[0].style.backgroundColor = '" + "yellow" + "'", this.GetElement());
         }

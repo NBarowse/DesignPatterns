@@ -83,6 +83,16 @@
         }
 
         /// <summary>
+        /// Clicks 'Drafts' button using JsExecutor
+        /// </summary>
+        /// <returns>Drafts Page</returns>
+        public DraftsPage JsOpenDrafts()
+        {
+            this.drafts.JsClick();
+            return new DraftsPage();
+        }
+
+        /// <summary>
         /// Clicks 'Sent' button
         /// </summary>
         /// <returns>Sent Page</returns>
