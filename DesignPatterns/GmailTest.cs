@@ -229,6 +229,7 @@
             DraftsPage draftsPage = homePage.OpenDrafts();
             draftsPage.TypeInSearchBox(this.subject);
             draftsPage.ClickEnterKey();
+            draftsPage.HighlightMailBySubject(this.subject);
             string subjectOfFoundMail = draftsPage.GetMailSubjectText(this.subject);
             int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
 

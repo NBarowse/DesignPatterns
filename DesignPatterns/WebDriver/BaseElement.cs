@@ -107,6 +107,15 @@
         }
 
         /// <summary>
+        /// Highlights active element
+        /// </summary>
+        public void JsHighlight()
+        {
+            IJavaScriptExecutor executor = (IJavaScriptExecutor)Browser.GetDriver();
+            executor.ExecuteScript("arguments[0].style.backgroundColor = '" + "yellow" + "'", this.GetElement());
+        }
+
+        /// <summary>
         /// Calls context menu and selects the 3rd option 'Удалить'
         /// </summary>
         public void DeleteWithContextMenu()

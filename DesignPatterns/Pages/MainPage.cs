@@ -137,6 +137,16 @@
         }
 
         /// <summary>
+        /// Highlights mail by subject
+        /// </summary>
+        /// <param name="subject"></param>
+        public void HighlightMailBySubject(string subject)
+        {
+            this.GetMailBySubject(subject);
+            this.mailBySubject.JsHighlight();
+        }
+
+        /// <summary>
         /// Determines whether the mail that matches specified subject is displayed on the page
         /// </summary>
         /// <param name="subject"></param>
