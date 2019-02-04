@@ -3,6 +3,7 @@
     using DesignPatterns.WebDriver;
 
     using OpenQA.Selenium;
+    using OpenQA.Selenium.Interactions;
 
     public abstract class MainPage
     {
@@ -35,6 +36,15 @@
         /// </summary>
         /// <param name="subject"></param>
         public abstract void DeleteMailBySubject(string subject);
+
+        /// Deletes the mail by specified subject via context menu
+        /// </summary>
+        /// <param name="subject"></param>
+        public void DeleteMailWithContextMenu(string subject)
+        {
+            this.GetMailBySubject(subject);
+            this.mailBySubject.DeleteWithContextClick();
+        }
 
         /// <summary>
         /// Gets text of 'Write' button
@@ -169,7 +179,18 @@
             this.searchBox.SendKeys(subject);
             this.btnSearch.Click();
         }
-                
+
+        /// <summary>
+        /// Performs search by specified subject by clicking Enter on the keyboard
+        /// </summary>
+        /// <param name="subject"></param>
+        public void SearchMailBySubjectWithKeyboard(string subject)
+        {
+            this.searchBox.SendKeys(subject);
+            Actions builder = new Actions(Browser.GetDriver());
+            builder.SendKeys(Keys.Enter);
+        }
+
         /// <summary>
         /// Determines elements Subject of the mail and Select by specified subject
         /// </summary>

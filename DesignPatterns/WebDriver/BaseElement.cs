@@ -6,6 +6,7 @@
 
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
+    using OpenQA.Selenium.Interactions;
 
     public class BaseElement : IWebElement
     {
@@ -70,6 +71,14 @@
         }
 
         /// <summary>
+        /// Waits until the web element becomes clickable on the page
+        /// </summary>
+        public void WaitForIsClickable()
+        {
+            new WebDriverWait(Browser.GetDriver(), TimeSpan.FromSeconds(Browser.TimeoutForElement)).Until(ExpectedConditions.ElementExists(this.Locator));
+        }
+               
+        /// <summary>
         /// Clears the content of the web element after the web element becomes visible
         /// </summary>
         public void Clear()
@@ -97,6 +106,15 @@
             executor.ExecuteScript("arguments[0].click();", this.GetElement());
         }
 
+        /// <summary>
+        /// Calls context menu and selects the 3rd option
+        /// </summary>
+        public void DeleteWithContextClick()
+        {
+            this.WaitForIsVisible();
+            new Actions(Browser.GetDriver()).ContextClick(this.GetElement()).SendKeys(Keys.ArrowDown).SendKeys(Keys.ArrowDown).SendKeys(Keys.ArrowDown).SendKeys(Keys.Return).Build().Perform();
+        }
+                
         /// <summary>
         /// Finds the first web element by locator
         /// </summary>

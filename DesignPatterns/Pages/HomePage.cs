@@ -7,7 +7,7 @@
     public class HomePage : MainPage
     {
         #region BaseElements
-        private readonly BaseElement deleteMail = new BaseElement(By.XPath("//div[@role='button' and @aria-label='Удалить']"));
+        private readonly BaseElement deleteMail = new BaseElement(By.XPath("//div[@gh='tm']//div[@role='button' and @title='Удалить']"));
         #endregion
 
         #region Methods

@@ -80,7 +80,7 @@
             // Log out.
             sentPage.Logout();
         }
-
+     
         /// <summary>
         /// The test verifies that the mail is sent and deleted.
         /// Test Scenario:
@@ -127,14 +127,78 @@
         /// 2. Create a new mail.
         /// 3. Save the mail as a draft.
         /// 4. Repeat steps 2-3 4 times.
-        /// 5. Perform search in drafts.
+        /// 5. Perform search in drafts by clicking Enter in search box.
         /// 6. Verify, that found draft matches searched term 
-        /// 7. Delete searched draft.
+        /// 7. Delete searched draft via context menu.
         /// 8. Verify, that the mail disappeared from ‘Drafts’ folder.
         /// 9. Verify, that the mail is in ‘Trash’ folder
         /// 10. Log out.
         /// </summary>
         [Test]
+        public void TestSearchAndDeleteDraftMailWithContextMenu()
+        {
+            // Login to the mail box.
+            HomePage homePage = Login();
+
+            EmailPage emailPage;
+            int lengthOfSubject = subject.Length;
+            int num = 5;
+            // Create a new mail.
+            // Save the mail as a draft.
+            // Repeat steps 2-3 4 times.
+            do
+            {
+                string sub = subject.Substring(0, lengthOfSubject);
+                emailPage = homePage.ClickWriteBtn();
+                emailPage.CreateDraft(this.mailTo, sub, this.text);
+                emailPage.SaveAndCloseDraft();
+                lengthOfSubject--;
+                num--;
+            } while (num != 0);
+
+
+            // Perform search in drafts.
+            DraftsPage draftsPage = homePage.OpenDrafts();
+            draftsPage.SearchMailBySubject(this.subject);
+            string subjectOfFoundMail = draftsPage.GetMailSubjectText(this.subject);
+            int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
+
+            // Verify, that found draft matches searched term 
+            Assert.AreEqual(numberOfFoundMails, 1, "The wrong number of mails was found");
+            Assert.AreEqual(subjectOfFoundMail, this.subject, "The wrong mail was found");
+
+            // Delete searched draft.
+            homePage.DeleteMailWithContextMenu(this.subject);
+
+            // Verify, that the mail disappeared from ‘Drafts’ folder.
+            draftsPage.RefreshPage();
+            bool isMailDisplayed = draftsPage.IsMailDisplayed(this.subject);
+            Assert.IsFalse(isMailDisplayed);
+
+            // Verify, that the mail is in ‘Trash’ folder
+            TrashPage trashPage = draftsPage.OpenTrash();
+            string subjectOfDeletedMail = trashPage.GetMailSubjectText(this.subject);
+            Assert.AreEqual(subjectOfDeletedMail, this.subject, "The mail wasn't deleted");
+
+            // Log out.
+            trashPage.Logout();
+        }
+    
+    /// <summary>
+    /// The test verifies that search in drafts works and searched mail is deleted.
+    /// Test Scenario:
+    /// 1. Login to the mail box.
+    /// 2. Create a new mail.
+    /// 3. Save the mail as a draft.
+    /// 4. Repeat steps 2-3 4 times.
+    /// 5. Perform search in drafts.
+    /// 6. Verify, that found draft matches searched term 
+    /// 7. Delete searched draft.
+    /// 8. Verify, that the mail disappeared from ‘Drafts’ folder.
+    /// 9. Verify, that the mail is in ‘Trash’ folder
+    /// 10. Log out.
+    /// </summary>
+    [Test]
         public void TestSearchAndDeleteDraftMail()
         {
             // Login to the mail box.
