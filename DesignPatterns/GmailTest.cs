@@ -40,7 +40,7 @@
             string writeBtnText = homePage.GetWriteBtnText();
 
             // Assert, that the login is successful: Если появляется кнопка Написать, значит вход выполнен успешно
-            StringAssert.Contains(writeBtnText, "Написать", "Login failed.");
+            StringAssert.Contains("Написать", writeBtnText, "Login failed.");
 
             // Create a new mail(fill addressee, subject and body fields).
             EmailPage emailPage = homePage.ClickWriteBtn();
@@ -52,7 +52,7 @@
             // Verify, that the mail presents in ‘Drafts’ folder.
             DraftsPage draftsPage = homePage.OpenDrafts();
             string subjectOfCreatedDraft = draftsPage.GetMailSubjectText(this.subject);
-            Assert.AreEqual(subjectOfCreatedDraft, this.subject, "Draft wasn't saved");
+            Assert.AreEqual(this.subject, subjectOfCreatedDraft, "Draft wasn't saved");
 
             // Verify the draft content(addressee, subject and body – should be the same as in 3). 
             emailPage = draftsPage.OpenMailBySubject(this.subject);
@@ -60,9 +60,9 @@
             string draftMailTo = emailPage.GetDraftMailToText();
             string draftSubject = emailPage.GetDraftSubjectText();
 
-            StringAssert.Contains(draftMailTo, this.mailTo, "TO value is not expected");
-            StringAssert.Contains(draftSubject, this.subject, "Subject value is not expected");
-            StringAssert.Contains(draftBody, this.text, "Body value is not expected");
+            StringAssert.Contains(this.mailTo, draftMailTo, "TO value is not expected");
+            StringAssert.Contains(this.subject, draftSubject, "Subject value is not expected");
+            StringAssert.Contains(this.text, draftBody,  "Body value is not expected");
 
             // Send the mail.
             emailPage.SendDraft();
@@ -75,7 +75,7 @@
             // Verify, that the mail is in ‘Sent’ folder.
             SentPage sentPage = draftsPage.OpenSent();
             string subjectOfSentMail = sentPage.GetMailSubjectText(this.subject);
-            Assert.AreEqual(subjectOfSentMail, this.subject, "Mail is not in 'Sent' folder");
+            Assert.AreEqual(this.subject, subjectOfSentMail, "Mail is not in 'Sent' folder");
 
             // Log out.
             sentPage.Logout();
@@ -104,7 +104,8 @@
             
             // Delete sent mail.
             SentPage sentPage = homePage.OpenSent();
-            sentPage.DeleteMailBySubject(this.subject);
+            sentPage.SelectMailBySubject(this.subject);
+            sentPage.DeleteSelectedMail();
 
             // Verify, that the mail disappeared from ‘Sent’ folder.
             sentPage.RefreshPage();
@@ -114,71 +115,7 @@
             // Verify, that the mail is in ‘Trash’ folder
             TrashPage trashPage = sentPage.OpenTrash();
             string subjectOfDeletedMail = trashPage.GetMailSubjectText(this.subject);
-            Assert.AreEqual(subjectOfDeletedMail, this.subject, "The mail wasn't deleted");
-
-            // Log out.
-            trashPage.Logout();
-        }
-
-        /// <summary>
-        /// The test verifies that search in drafts works and searched mail is deleted.
-        /// Test Scenario:
-        /// 1. Login to the mail box.
-        /// 2. Create a new mail.
-        /// 3. Save the mail as a draft.
-        /// 4. Repeat steps 2-3 4 times.
-        /// 5. Perform search in drafts by clicking Enter in search box.
-        /// 6. Verify, that found draft matches searched term 
-        /// 7. Delete searched draft via context menu.
-        /// 8. Verify, that the mail disappeared from ‘Drafts’ folder.
-        /// 9. Verify, that the mail is in ‘Trash’ folder
-        /// 10. Log out.
-        /// </summary>
-        [Test]
-        public void TestSearchAndDeleteDraftMailWithContextMenu()
-        {
-            // Login to the mail box.
-            HomePage homePage = Login();
-
-            EmailPage emailPage;
-            int lengthOfSubject = subject.Length;
-            int num = 5;
-            // Create a new mail.
-            // Save the mail as a draft.
-            // Repeat steps 2-3 4 times.
-            do
-            {
-                string sub = subject.Substring(0, lengthOfSubject);
-                emailPage = homePage.ClickWriteBtn();
-                emailPage.CreateDraft(this.mailTo, sub, this.text);
-                emailPage.SaveAndCloseDraft();
-                lengthOfSubject--;
-                num--;
-            } while (num != 0);
-
-
-            // Perform search in drafts.
-            DraftsPage draftsPage = homePage.OpenDrafts();
-            draftsPage.SearchMailBySubject(this.subject);
-            string subjectOfFoundMail = draftsPage.GetMailSubjectText(this.subject);
-            int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
-
-            // Verify, that found draft matches searched term 
-            Assert.AreEqual(numberOfFoundMails, 1, "The wrong number of mails was found");
-            Assert.AreEqual(subjectOfFoundMail, this.subject, "The wrong mail was found");
-
-            // Delete searched draft.
-            homePage.DeleteMailWithContextMenu(this.subject);
-
-            // Verify, that the mail disappeared from ‘Drafts’ folder.
-            draftsPage.RefreshPage();
-            bool isMailDisplayed = draftsPage.IsMailDisplayed(this.subject);
-            Assert.IsFalse(isMailDisplayed);
-
-            // Verify, that the mail is in ‘Trash’ folder
-            TrashPage trashPage = draftsPage.OpenTrash();
-            string subjectOfDeletedMail = trashPage.GetMailSubjectText(this.subject);
-            Assert.AreEqual(subjectOfDeletedMail, this.subject, "The mail wasn't deleted");
+            Assert.AreEqual(this.subject, subjectOfDeletedMail, "The mail wasn't deleted");
 
             // Log out.
             trashPage.Logout();
@@ -223,16 +160,18 @@
 
             // Perform search in drafts.
             DraftsPage draftsPage = homePage.OpenDrafts();
-            draftsPage.SearchMailBySubject(this.subject);
+            draftsPage.TypeInSearchBox(this.subject);
+            draftsPage.ClickSearchBtn();
             string subjectOfFoundMail = draftsPage.GetMailSubjectText(this.subject);
             int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
 
             // Verify, that found draft matches searched term 
-            Assert.AreEqual(numberOfFoundMails, 1, "The wrong number of mails was found");
-            Assert.AreEqual(subjectOfFoundMail, this.subject, "The wrong mail was found");
+            Assert.AreEqual(1, numberOfFoundMails, "The wrong number of mails was found");
+            Assert.AreEqual(this.subject, subjectOfFoundMail, "The wrong mail was found");
 
             // Delete searched draft.
-            homePage.DeleteMailBySubject(this.subject);
+            homePage.SelectMailBySubject(this.subject);
+            homePage.DeleteSelectedMail();
 
             // Verify, that the mail disappeared from ‘Drafts’ folder.
             draftsPage.RefreshPage();
@@ -242,7 +181,73 @@
             // Verify, that the mail is in ‘Trash’ folder
             TrashPage trashPage = draftsPage.OpenTrash();
             string subjectOfDeletedMail = trashPage.GetMailSubjectText(this.subject);
-            Assert.AreEqual(subjectOfDeletedMail, this.subject, "The mail wasn't deleted");
+            Assert.AreEqual(this.subject, subjectOfDeletedMail, "The mail wasn't deleted");
+
+            // Log out.
+            trashPage.Logout();
+        }
+
+
+        /// <summary>
+        /// The test verifies that search in drafts works and searched mail is deleted.
+        /// Test Scenario:
+        /// 1. Login to the mail box.
+        /// 2. Create a new mail.
+        /// 3. Save the mail as a draft.
+        /// 4. Repeat steps 2-3 4 times.
+        /// 5. Perform search in drafts by clicking Enter key
+        /// 6. Verify, that found draft matches searched term 
+        /// 7. Delete searched draft via context menu.
+        /// 8. Verify, that the mail disappeared from ‘Drafts’ folder.
+        /// 9. Verify, that the mail is in ‘Trash’ folder
+        /// 10. Log out.
+        /// </summary>
+        [Test]
+        public void TestSearchAndDeleteDraftMailWithContextMenu()
+        {
+            // Login to the mail box.
+            HomePage homePage = Login();
+
+            EmailPage emailPage;
+            int lengthOfSubject = subject.Length;
+            int num = 5;
+            // Create a new mail.
+            // Save the mail as a draft.
+            // Repeat steps 2-3 4 times.
+            do
+            {
+                string sub = subject.Substring(0, lengthOfSubject);
+                emailPage = homePage.ClickWriteBtn();
+                emailPage.CreateDraft(this.mailTo, sub, this.text);
+                emailPage.SaveAndCloseDraft();
+                lengthOfSubject--;
+                num--;
+            } while (num != 0);
+
+
+            // Perform search in drafts by clicking Enter key.
+            DraftsPage draftsPage = homePage.OpenDrafts();
+            draftsPage.TypeInSearchBox(this.subject);
+            draftsPage.ClickEnterKey();
+            string subjectOfFoundMail = draftsPage.GetMailSubjectText(this.subject);
+            int numberOfFoundMails = draftsPage.GetNumberOfMailsDisplayed();
+
+            // Verify, that found draft matches searched term 
+            Assert.AreEqual(1, numberOfFoundMails, "The wrong number of mails was found");
+            Assert.AreEqual(this.subject, subjectOfFoundMail, "The wrong mail was found");
+
+            // Delete searched draft.
+            homePage.DeleteMailWithContextMenu(this.subject);
+
+            // Verify, that the mail disappeared from ‘Drafts’ folder.
+            draftsPage.RefreshPage();
+            bool isMailDisplayed = draftsPage.IsMailDisplayed(this.subject);
+            Assert.IsFalse(isMailDisplayed);
+
+            // Verify, that the mail is in ‘Trash’ folder
+            TrashPage trashPage = draftsPage.OpenTrash();
+            string subjectOfDeletedMail = trashPage.GetMailSubjectText(this.subject);
+            Assert.AreEqual(this.subject, subjectOfDeletedMail, "The mail wasn't deleted");
 
             // Log out.
             trashPage.Logout();

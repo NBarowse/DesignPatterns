@@ -34,8 +34,7 @@
         /// <summary>
         /// Deletes the mail by specified subject
         /// </summary>
-        /// <param name="subject"></param>
-        public abstract void DeleteMailBySubject(string subject);
+        public abstract void DeleteSelectedMail();
 
         /// Deletes the mail by specified subject via context menu
         /// </summary>
@@ -43,7 +42,7 @@
         public void DeleteMailWithContextMenu(string subject)
         {
             this.GetMailBySubject(subject);
-            this.mailBySubject.DeleteWithContextClick();
+            this.mailBySubject.DeleteWithContextMenu();
         }
 
         /// <summary>
@@ -171,25 +170,31 @@
         }
 
         /// <summary>
-        /// Performs search by specified subject
+        /// Types search term in search box
         /// </summary>
         /// <param name="subject"></param>
-        public void SearchMailBySubject(string subject)
+        public void TypeInSearchBox(string subject)
         {
             this.searchBox.SendKeys(subject);
+        }
+
+        /// <summary>
+        /// Clicks Search buttom
+        /// </summary>
+        public void ClickSearchBtn()
+        {
             this.btnSearch.Click();
         }
 
         /// <summary>
-        /// Performs search by specified subject by clicking Enter on the keyboard
+        /// Clicks Enter on the Keyboard
         /// </summary>
-        /// <param name="subject"></param>
-        public void SearchMailBySubjectWithKeyboard(string subject)
+        public void ClickEnterKey()
         {
-            this.searchBox.SendKeys(subject);
-            Actions builder = new Actions(Browser.GetDriver());
-            builder.SendKeys(Keys.Enter);
-        }
+            new Actions(Browser.GetDriver())
+                .SendKeys(Keys.Enter)
+                .Build().Perform();
+        }       
 
         /// <summary>
         /// Determines elements Subject of the mail and Select by specified subject

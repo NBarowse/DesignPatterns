@@ -107,14 +107,28 @@
         }
 
         /// <summary>
-        /// Calls context menu and selects the 3rd option
+        /// Calls context menu and selects the 3rd option 'Удалить'
         /// </summary>
-        public void DeleteWithContextClick()
+        public void DeleteWithContextMenu()
         {
             this.WaitForIsVisible();
-            new Actions(Browser.GetDriver()).ContextClick(this.GetElement()).SendKeys(Keys.ArrowDown).SendKeys(Keys.ArrowDown).SendKeys(Keys.ArrowDown).SendKeys(Keys.Return).Build().Perform();
+            new Actions(Browser.GetDriver()).ContextClick(this.GetElement())
+                .SendKeys(Keys.ArrowDown)
+                .SendKeys(Keys.ArrowDown)
+                .SendKeys(Keys.ArrowDown)
+                .SendKeys(Keys.Return)
+                .Build().Perform();
         }
-                
+
+        /// <summary>
+        /// Calls context menu
+        /// </summary>
+        public void CallsContextClick()
+        {
+            this.WaitForIsVisible();
+            new Actions(Browser.GetDriver()).ContextClick(this.GetElement()).Build().Perform();
+        }
+
         /// <summary>
         /// Finds the first web element by locator
         /// </summary>

@@ -14,10 +14,8 @@
         /// <summary>
         /// Deletes the mail by specified subject
         /// </summary>
-        /// <param name="subject"></param>
-        public override void DeleteMailBySubject(string subject)
+        public override void DeleteSelectedMail()
         {
-            SelectMailBySubject(subject);
             this.deleteMail.Click();
         }        
         #endregion
