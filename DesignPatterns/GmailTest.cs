@@ -168,7 +168,7 @@
             Assert.AreEqual(subjectOfFoundMail, this.subject, "The wrong mail was found");
 
             // Delete searched draft.
-            draftsPage.DeleteMailBySubjectAfterSearch(this.subject);
+            homePage.DeleteMailBySubject(this.subject);
 
             // Verify, that the mail disappeared from ‘Drafts’ folder.
             draftsPage.RefreshPage();
