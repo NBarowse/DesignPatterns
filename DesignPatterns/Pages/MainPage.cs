@@ -189,6 +189,16 @@
         }
 
         /// <summary>
+        /// Types search term in search box using JS Executor
+        /// </summary>
+        /// <param name="subject"></param>
+        public void JsTypeInSearchBox(string subject)
+        {
+            this.searchBox.JsSendKeys(subject);
+        }
+
+
+        /// <summary>
         /// Clicks Search buttom
         /// </summary>
         public void ClickSearchBtn()

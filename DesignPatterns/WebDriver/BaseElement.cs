@@ -114,7 +114,7 @@
             IJavaScriptExecutor executor = (IJavaScriptExecutor)Browser.GetDriver();
             executor.ExecuteScript("arguments[0].style.backgroundColor = '" + "yellow" + "'", this.GetElement());
         }
-
+                
         /// <summary>
         /// Calls context menu and selects the 3rd option 'Удалить'
         /// </summary>
@@ -198,6 +198,15 @@
         {
             this.WaitForIsVisible();
             Browser.GetDriver().FindElement(this.Locator).SendKeys(text);
+        }
+
+        /// <summary>
+        /// Simulates typing text into the web element using JS Executor
+        /// </summary>
+        public void JsSendKeys(string text)
+        {
+            IJavaScriptExecutor executor = (IJavaScriptExecutor)Browser.GetDriver();
+            executor.ExecuteScript("arguments[0].value = arguments[1];", this.GetElement(), text);
         }
 
         /// <summary>
